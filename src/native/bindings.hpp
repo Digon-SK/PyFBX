@@ -35,6 +35,13 @@ struct camera_view;
 struct light_view;
 struct bone_view;
 struct property_view;
+struct skin_deformer_view;
+struct skin_cluster_view;
+struct blend_deformer_view;
+struct blend_channel_view;
+struct blend_shape_view;
+struct animation_layer_view;
+struct animation_curve_view;
 
 struct scene_view {
     scene_owner owner;
@@ -71,6 +78,13 @@ struct camera_view { scene_owner owner; const ufbx_camera* camera{}; };
 struct light_view { scene_owner owner; const ufbx_light* light{}; };
 struct bone_view { scene_owner owner; const ufbx_bone* bone{}; };
 struct property_view { scene_owner owner; const ufbx_prop* property{}; };
+struct skin_deformer_view { scene_owner owner; const ufbx_skin_deformer* deformer{}; };
+struct skin_cluster_view { scene_owner owner; const ufbx_skin_cluster* cluster{}; };
+struct blend_deformer_view { scene_owner owner; const ufbx_blend_deformer* deformer{}; };
+struct blend_channel_view { scene_owner owner; const ufbx_blend_channel* channel{}; };
+struct blend_shape_view { scene_owner owner; const ufbx_blend_shape* shape{}; };
+struct animation_layer_view { scene_owner owner; const ufbx_anim_layer* layer{}; };
+struct animation_curve_view { scene_owner owner; const ufbx_anim_curve* curve{}; };
 
 [[nodiscard]] scene_owner own_scene(ufbx_scene* scene);
 [[nodiscard]] std::string to_string(ufbx_string value);
@@ -89,6 +103,7 @@ struct property_view { scene_owner owner; const ufbx_prop* property{}; };
     const scene_owner& owner, const ufbx_props& source, const std::string& name);
 
 void bind_entities(py::module_& module);
+void bind_deform_animation(py::module_& module);
 void bind_scene(py::module_& module);
 void bind_mesh(py::module_& module);
 void bind_material(py::module_& module);

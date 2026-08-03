@@ -2,7 +2,12 @@
 
 from ._api import as_numpy, find, load, loads, walk
 from ._native import (
+    AnimationCurve,
+    AnimationLayer,
     AnimationStack,
+    BlendChannel,
+    BlendDeformer,
+    BlendShape,
     Bone,
     Camera,
     Light,
@@ -12,14 +17,21 @@ from ._native import (
     Node,
     Property,
     Scene,
+    SkinCluster,
+    SkinDeformer,
     Texture,
     __ufbx_version__,
 )
 from ._options import AxisSystem, LoadOptions
 
 __all__ = [
+    "AnimationCurve",
+    "AnimationLayer",
     "AnimationStack",
     "AxisSystem",
+    "BlendChannel",
+    "BlendDeformer",
+    "BlendShape",
     "Bone",
     "Camera",
     "Light",
@@ -30,6 +42,8 @@ __all__ = [
     "Node",
     "Property",
     "Scene",
+    "SkinCluster",
+    "SkinDeformer",
     "Texture",
     "__ufbx_version__",
     "as_numpy",

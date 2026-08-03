@@ -118,6 +118,24 @@ py::tuple mesh_instances(const mesh_view& self) {
     return result;
 }
 
+py::tuple skin_deformers(const mesh_view& self) {
+    const auto& source = self.mesh->skin_deformers;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(skin_deformer_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
+py::tuple blend_deformers(const mesh_view& self) {
+    const auto& source = self.mesh->blend_deformers;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(blend_deformer_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
 }  // namespace
 
 void bind_mesh(py::module_& module) {
@@ -171,6 +189,8 @@ void bind_mesh(py::module_& module) {
         })
         .def_property_readonly("materials", &mesh_materials)
         .def_property_readonly("instances", &mesh_instances)
+        .def_property_readonly("skin_deformers", &skin_deformers)
+        .def_property_readonly("blend_deformers", &blend_deformers)
         .def_property_readonly("properties", [](const mesh_view& self) {
             return properties(self.owner, self.mesh->props);
         })

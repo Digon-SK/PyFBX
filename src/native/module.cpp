@@ -10,6 +10,7 @@ PYBIND11_MODULE(_native, module) {
     py::register_exception<load_error>(module, "LoadError", PyExc_RuntimeError);
 
     bind_entities(module);
+    bind_deform_animation(module);
     bind_material(module);
     bind_mesh(module);
     bind_scene(module);

@@ -91,6 +91,24 @@ py::tuple scene_animations(const scene_view& self) {
     return result;
 }
 
+py::tuple animation_layers(const animation_stack_view& self) {
+    const auto& source = self.stack->layers;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(animation_layer_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
+py::tuple scene_animation_curves(const scene_view& self) {
+    const auto& source = self.get()->anim_curves;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(animation_curve_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
 py::tuple scene_cameras(const scene_view& self) {
     const auto& source = self.get()->cameras;
     py::tuple result{source.count};
@@ -287,6 +305,7 @@ void bind_scene(py::module_& module) {
         .def_property_readonly("duration", [](const animation_stack_view& self) {
             return self.stack->time_end - self.stack->time_begin;
         })
+        .def_property_readonly("layers", &animation_layers)
         .def("__repr__", [](const animation_stack_view& self) {
             return "AnimationStack(name='" + to_string(self.stack->name) + "', duration=" +
                 std::to_string(self.stack->time_end - self.stack->time_begin) + ")";
@@ -347,6 +366,7 @@ void bind_scene(py::module_& module) {
         .def_property_readonly("materials", &scene_materials)
         .def_property_readonly("textures", &scene_textures)
         .def_property_readonly("animations", &scene_animations)
+        .def_property_readonly("animation_curves", &scene_animation_curves)
         .def_property_readonly("cameras", &scene_cameras)
         .def_property_readonly("lights", &scene_lights)
         .def_property_readonly("bones", &scene_bones)
