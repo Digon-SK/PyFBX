@@ -42,6 +42,9 @@ struct blend_channel_view;
 struct blend_shape_view;
 struct animation_layer_view;
 struct animation_curve_view;
+struct element_view;
+struct nurbs_curve_view;
+struct nurbs_surface_view;
 
 struct scene_view {
     scene_owner owner;
@@ -85,6 +88,9 @@ struct blend_channel_view { scene_owner owner; const ufbx_blend_channel* channel
 struct blend_shape_view { scene_owner owner; const ufbx_blend_shape* shape{}; };
 struct animation_layer_view { scene_owner owner; const ufbx_anim_layer* layer{}; };
 struct animation_curve_view { scene_owner owner; const ufbx_anim_curve* curve{}; };
+struct element_view { scene_owner owner; const ufbx_element* element{}; };
+struct nurbs_curve_view { scene_owner owner; const ufbx_nurbs_curve* curve{}; };
+struct nurbs_surface_view { scene_owner owner; const ufbx_nurbs_surface* surface{}; };
 
 [[nodiscard]] scene_owner own_scene(ufbx_scene* scene);
 [[nodiscard]] std::string to_string(ufbx_string value);
@@ -104,6 +110,7 @@ struct animation_curve_view { scene_owner owner; const ufbx_anim_curve* curve{};
 
 void bind_entities(py::module_& module);
 void bind_deform_animation(py::module_& module);
+void bind_advanced_geometry(py::module_& module);
 void bind_scene(py::module_& module);
 void bind_mesh(py::module_& module);
 void bind_material(py::module_& module);

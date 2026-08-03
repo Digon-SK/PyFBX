@@ -136,6 +136,48 @@ py::tuple scene_bones(const scene_view& self) {
     return result;
 }
 
+py::tuple scene_elements(const scene_view& self) {
+    const auto& source = self.get()->elements;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(element_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
+py::tuple elements_of_type(const scene_view& self, const std::string& type) {
+    std::vector<const ufbx_element*> matches;
+    for (std::size_t i = 0; i < self.get()->elements.count; ++i) {
+        const ufbx_element* element = self.get()->elements.data[i];
+        if (type == element_type_name(element->type)) {
+            matches.push_back(element);
+        }
+    }
+    py::tuple result{matches.size()};
+    for (std::size_t i = 0; i < matches.size(); ++i) {
+        result[i] = py::cast(element_view{self.owner, matches[i]});
+    }
+    return result;
+}
+
+py::tuple scene_nurbs_curves(const scene_view& self) {
+    const auto& source = self.get()->nurbs_curves;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(nurbs_curve_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
+py::tuple scene_nurbs_surfaces(const scene_view& self) {
+    const auto& source = self.get()->nurbs_surfaces;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(nurbs_surface_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
 py::tuple scene_warnings(const scene_view& self) {
     const auto& source = self.get()->metadata.warnings;
     py::tuple result{source.count};
@@ -247,6 +289,12 @@ py::object node_bone(const node_view& self) {
         : py::cast(bone_view{self.owner, self.node->bone});
 }
 
+py::object node_attribute(const node_view& self) {
+    return self.node->attrib == nullptr
+        ? py::object{py::none()}
+        : py::cast(element_view{self.owner, self.node->attrib});
+}
+
 py::tuple node_materials(const node_view& self) {
     const auto& source = self.node->materials;
     py::tuple result{source.count};
@@ -328,6 +376,7 @@ void bind_scene(py::module_& module) {
         .def_property_readonly("camera", &node_camera)
         .def_property_readonly("light", &node_light)
         .def_property_readonly("bone", &node_bone)
+        .def_property_readonly("attribute", &node_attribute)
         .def_property_readonly("materials", &node_materials)
         .def_property_readonly("properties", [](const node_view& self) {
             return properties(self.owner, self.node->props);
@@ -370,6 +419,10 @@ void bind_scene(py::module_& module) {
         .def_property_readonly("cameras", &scene_cameras)
         .def_property_readonly("lights", &scene_lights)
         .def_property_readonly("bones", &scene_bones)
+        .def_property_readonly("elements", &scene_elements)
+        .def_property_readonly("nurbs_curves", &scene_nurbs_curves)
+        .def_property_readonly("nurbs_surfaces", &scene_nurbs_surfaces)
+        .def("elements_of_type", &elements_of_type, py::arg("type"))
         .def_property_readonly("warnings", &scene_warnings)
         .def_property_readonly("filename", [](const scene_view& self) {
             return to_string(self.get()->metadata.filename);
