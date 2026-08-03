@@ -96,6 +96,7 @@ ufbx_load_opts parse_load_options(const py::dict& values, const std::string& fil
     opts.ignore_missing_external_files = option(values, "ignore_missing_external_files", false);
     opts.generate_missing_normals = option(values, "generate_missing_normals", true);
     opts.strict = option(values, "strict", false);
+    opts.retain_dom = option(values, "retain_dom", false);
 
     const auto depth = option<std::uint64_t>(values, "node_depth_limit", 0);
     if (depth > std::numeric_limits<std::uint32_t>::max()) {

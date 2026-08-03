@@ -33,6 +33,7 @@ PYBIND11_MODULE(_native, module) {
     bind_entities(module);
     bind_deform_animation(module);
     bind_advanced_geometry(module);
+    bind_miscellaneous(module);
     bind_material(module);
     bind_mesh(module);
     bind_scene(module);

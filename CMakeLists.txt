@@ -24,6 +24,7 @@ pybind11_add_module(_native MODULE
     src/native/entities.cpp
     src/native/deform_animation.cpp
     src/native/advanced_geometry.cpp
+    src/native/miscellaneous.cpp
     src/native/scene.cpp
     src/native/mesh.cpp
     src/native/material.cpp

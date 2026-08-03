@@ -178,6 +178,48 @@ py::tuple scene_nurbs_surfaces(const scene_view& self) {
     return result;
 }
 
+py::tuple scene_constraints(const scene_view& self) {
+    const auto& source = self.get()->constraints;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(constraint_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
+py::tuple scene_poses(const scene_view& self) {
+    const auto& source = self.get()->poses;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(pose_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
+py::tuple scene_audio_layers(const scene_view& self) {
+    const auto& source = self.get()->audio_layers;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(audio_layer_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
+py::tuple scene_audio_clips(const scene_view& self) {
+    const auto& source = self.get()->audio_clips;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(audio_clip_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
+py::object scene_dom(const scene_view& self) {
+    return self.get()->dom_root == nullptr
+        ? py::object{py::none()}
+        : py::cast(dom_node_view{self.owner, self.get()->dom_root});
+}
+
 py::tuple scene_warnings(const scene_view& self) {
     const auto& source = self.get()->metadata.warnings;
     py::tuple result{source.count};
@@ -428,6 +470,11 @@ void bind_scene(py::module_& module) {
         .def_property_readonly("elements", &scene_elements)
         .def_property_readonly("nurbs_curves", &scene_nurbs_curves)
         .def_property_readonly("nurbs_surfaces", &scene_nurbs_surfaces)
+        .def_property_readonly("constraints", &scene_constraints)
+        .def_property_readonly("poses", &scene_poses)
+        .def_property_readonly("audio_layers", &scene_audio_layers)
+        .def_property_readonly("audio_clips", &scene_audio_clips)
+        .def_property_readonly("dom", &scene_dom)
         .def("elements_of_type", &elements_of_type, py::arg("type"))
         .def_property_readonly("warnings", &scene_warnings)
         .def_property_readonly("filename", [](const scene_view& self) {
