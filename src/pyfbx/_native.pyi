@@ -13,9 +13,6 @@ __ufbx_version__: tuple[int, int, int]
 __thread_safe__: bool
 
 
-class LoadError(RuntimeError): ...
-
-
 class Property:
     @property
     def name(self) -> str: ...

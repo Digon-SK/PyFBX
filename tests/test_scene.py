@@ -77,8 +77,17 @@ def test_options_validate_values() -> None:
 
 
 def test_missing_file_raises_load_error(tmp_path: Path) -> None:
-    with pytest.raises(pyfbx.LoadError):
+    with pytest.raises(pyfbx.LoadError) as caught:
         pyfbx.load(tmp_path / "missing.fbx")
+    assert caught.value.kind == "file_not_found"
+
+
+def test_views_have_stable_identity() -> None:
+    scene = pyfbx.load(ASSET)
+
+    assert scene.nodes[1] == scene.nodes[1]
+    assert hash(scene.meshes[0]) == hash(scene.meshes[0])
+    assert len({scene.nodes[1], scene.nodes[1]}) == 1
 
 
 def test_evaluate_scene() -> None:

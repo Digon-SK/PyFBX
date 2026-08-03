@@ -104,6 +104,7 @@ struct nurbs_surface_view { scene_owner owner; const ufbx_nurbs_surface* surface
 [[nodiscard]] ufbx_load_opts parse_load_options(const py::dict& values, const std::string& filename);
 [[nodiscard]] const char* element_type_name(ufbx_element_type type) noexcept;
 [[nodiscard]] const char* file_format_name(ufbx_file_format format) noexcept;
+[[nodiscard]] const char* error_type_name(ufbx_error_type type) noexcept;
 [[nodiscard]] py::tuple properties(const scene_owner& owner, const ufbx_props& source);
 [[nodiscard]] py::object find_property(
     const scene_owner& owner, const ufbx_props& source, const std::string& name);

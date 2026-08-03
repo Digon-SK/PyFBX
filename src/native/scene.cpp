@@ -401,6 +401,12 @@ void bind_scene(py::module_& module) {
         .def("find", &node_find, py::arg("name"), "Find a descendant by exact name.")
         .def("__len__", [](const node_view& self) { return self.node->children.count; })
         .def("__iter__", [](const node_view& self) { return py::iter(node_children(self)); })
+        .def("__eq__", [](const node_view& self, const node_view& other) {
+            return self.owner.get() == other.owner.get() && self.node == other.node;
+        }, py::is_operator())
+        .def("__hash__", [](const node_view& self) {
+            return reinterpret_cast<std::uintptr_t>(self.node);
+        })
         .def("__repr__", [](const node_view& self) {
             return "Node(name='" + to_string(self.node->name) + "', type='" +
                 element_type_name(self.node->attrib_type) + "')";

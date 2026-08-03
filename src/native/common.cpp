@@ -191,4 +191,26 @@ const char* file_format_name(const ufbx_file_format format) noexcept {
     }
 }
 
+const char* error_type_name(const ufbx_error_type type) noexcept {
+    switch (type) {
+    case UFBX_ERROR_NONE: return "none";
+    case UFBX_ERROR_FILE_NOT_FOUND: return "file_not_found";
+    case UFBX_ERROR_EMPTY_FILE: return "empty_file";
+    case UFBX_ERROR_EXTERNAL_FILE_NOT_FOUND: return "external_file_not_found";
+    case UFBX_ERROR_OUT_OF_MEMORY: return "out_of_memory";
+    case UFBX_ERROR_MEMORY_LIMIT: return "memory_limit";
+    case UFBX_ERROR_ALLOCATION_LIMIT: return "allocation_limit";
+    case UFBX_ERROR_TRUNCATED_FILE: return "truncated_file";
+    case UFBX_ERROR_IO: return "io";
+    case UFBX_ERROR_CANCELLED: return "cancelled";
+    case UFBX_ERROR_UNRECOGNIZED_FILE_FORMAT: return "unrecognized_file_format";
+    case UFBX_ERROR_INVALID_UTF8: return "invalid_utf8";
+    case UFBX_ERROR_BAD_INDEX: return "bad_index";
+    case UFBX_ERROR_NODE_DEPTH_LIMIT: return "node_depth_limit";
+    case UFBX_ERROR_UNSAFE_OPTIONS: return "unsafe_options";
+    case UFBX_ERROR_UNSUPPORTED_VERSION: return "unsupported_version";
+    default: return "unknown";
+    }
+}
+
 }  // namespace pyfbx

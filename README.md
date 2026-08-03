@@ -12,6 +12,9 @@ bajo nivel encapsulada detrás de objetos Python seguros.
 - Polígonos originales y triangulación coherente con atributos por esquina (UV seams).
 - Transformaciones como matrices 4×4 convencionales.
 - Evaluación de animaciones y skinning.
+- Curvas, keyframes, skin weights y blend shapes accesibles directamente.
+- Cámaras, luces, huesos, propiedades personalizadas y elementos poco comunes.
+- NURBS y topología half-edge para flujos de geometría avanzada.
 - Conversión opcional de ejes y unidades durante la carga.
 - NumPy opcional, sin convertirlo en dependencia obligatoria.
 - Type hints incluidos mediante `py.typed` y `_native.pyi`.
@@ -107,3 +110,5 @@ examples/           scripts ejecutables
 
 La API pública se importa desde `pyfbx`; `_native` es un detalle de implementación.
 
+La referencia resumida está en [`docs/api.md`](docs/api.md) y las instrucciones para
+contribuir en [`CONTRIBUTING.md`](CONTRIBUTING.md).
