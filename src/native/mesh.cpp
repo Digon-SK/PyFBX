@@ -171,6 +171,12 @@ void bind_mesh(py::module_& module) {
         })
         .def_property_readonly("materials", &mesh_materials)
         .def_property_readonly("instances", &mesh_instances)
+        .def_property_readonly("properties", [](const mesh_view& self) {
+            return properties(self.owner, self.mesh->props);
+        })
+        .def("find_property", [](const mesh_view& self, const std::string& name) {
+            return find_property(self.owner, self.mesh->props, name);
+        })
         .def_property_readonly("generated_normals", [](const mesh_view& self) {
             return self.mesh->generated_normals;
         })
@@ -182,4 +188,3 @@ void bind_mesh(py::module_& module) {
 }
 
 }  // namespace pyfbx
-

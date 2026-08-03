@@ -31,6 +31,10 @@ struct mesh_view;
 struct material_view;
 struct texture_view;
 struct animation_stack_view;
+struct camera_view;
+struct light_view;
+struct bone_view;
+struct property_view;
 
 struct scene_view {
     scene_owner owner;
@@ -63,6 +67,11 @@ struct animation_stack_view {
     const ufbx_anim_stack* stack{};
 };
 
+struct camera_view { scene_owner owner; const ufbx_camera* camera{}; };
+struct light_view { scene_owner owner; const ufbx_light* light{}; };
+struct bone_view { scene_owner owner; const ufbx_bone* bone{}; };
+struct property_view { scene_owner owner; const ufbx_prop* property{}; };
+
 [[nodiscard]] scene_owner own_scene(ufbx_scene* scene);
 [[nodiscard]] std::string to_string(ufbx_string value);
 [[nodiscard]] py::tuple to_tuple(ufbx_vec2 value);
@@ -75,10 +84,13 @@ struct animation_stack_view {
 [[nodiscard]] ufbx_load_opts parse_load_options(const py::dict& values, const std::string& filename);
 [[nodiscard]] const char* element_type_name(ufbx_element_type type) noexcept;
 [[nodiscard]] const char* file_format_name(ufbx_file_format format) noexcept;
+[[nodiscard]] py::tuple properties(const scene_owner& owner, const ufbx_props& source);
+[[nodiscard]] py::object find_property(
+    const scene_owner& owner, const ufbx_props& source, const std::string& name);
 
+void bind_entities(py::module_& module);
 void bind_scene(py::module_& module);
 void bind_mesh(py::module_& module);
 void bind_material(py::module_& module);
 
 }  // namespace pyfbx
-

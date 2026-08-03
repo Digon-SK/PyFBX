@@ -21,6 +21,7 @@ endif()
 pybind11_add_module(_native MODULE
     src/native/module.cpp
     src/native/common.cpp
+    src/native/entities.cpp
     src/native/scene.cpp
     src/native/mesh.cpp
     src/native/material.cpp
