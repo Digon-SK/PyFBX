@@ -136,6 +136,35 @@ py::tuple blend_deformers(const mesh_view& self) {
     return result;
 }
 
+py::tuple mesh_edges(const mesh_view& self) {
+    const auto& source = self.mesh->edges;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::make_tuple(source.data[i].a, source.data[i].b);
+    }
+    return result;
+}
+
+py::tuple mesh_topology(const mesh_view& self) {
+    std::vector<ufbx_topo_edge> topology(self.mesh->num_indices);
+    ufbx_compute_topology(self.mesh, topology.data(), topology.size());
+    py::tuple result{topology.size()};
+    for (std::size_t i = 0; i < topology.size(); ++i) {
+        const auto& edge = topology[i];
+        py::dict item;
+        item["index"] = edge.index;
+        item["next"] = edge.next;
+        item["previous"] = edge.prev;
+        item["twin"] = edge.twin == UFBX_NO_INDEX
+            ? py::object{py::none()} : py::cast(edge.twin);
+        item["face"] = edge.face;
+        item["edge"] = edge.edge == UFBX_NO_INDEX
+            ? py::object{py::none()} : py::cast(edge.edge);
+        result[i] = std::move(item);
+    }
+    return result;
+}
+
 }  // namespace
 
 void bind_mesh(py::module_& module) {
@@ -180,6 +209,8 @@ void bind_mesh(py::module_& module) {
             });
         })
         .def_property_readonly("faces", &faces)
+        .def_property_readonly("edges", &mesh_edges)
+        .def_property_readonly("topology", &mesh_topology)
         .def_property_readonly("triangles", &triangles,
             "Triangulated logical vertex indices.")
         .def_property_readonly("triangle_indices", &triangle_indices,
@@ -200,6 +231,20 @@ void bind_mesh(py::module_& module) {
         .def_property_readonly("generated_normals", [](const mesh_view& self) {
             return self.mesh->generated_normals;
         })
+        .def_property_readonly("subdivision", [](const mesh_view& self) {
+            py::dict result;
+            result["preview_levels"] = self.mesh->subdivision_preview_levels;
+            result["render_levels"] = self.mesh->subdivision_render_levels;
+            result["evaluated"] = self.mesh->subdivision_evaluated;
+            return result;
+        })
+        .def("weighted_face_normal", [](const mesh_view& self, const std::size_t face_index) {
+            if (face_index >= self.mesh->faces.count) {
+                throw py::index_error{};
+            }
+            return to_tuple(ufbx_get_weighted_face_normal(
+                &self.mesh->vertex_position, self.mesh->faces.data[face_index]));
+        }, py::arg("face_index"))
         .def("__repr__", [](const mesh_view& self) {
             return "Mesh(name='" + to_string(self.mesh->name) + "', vertices=" +
                 std::to_string(self.mesh->num_vertices) + ", faces=" +

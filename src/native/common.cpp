@@ -142,9 +142,41 @@ const char* element_type_name(const ufbx_element_type type) noexcept {
     case UFBX_ELEMENT_CAMERA: return "camera";
     case UFBX_ELEMENT_BONE: return "bone";
     case UFBX_ELEMENT_EMPTY: return "empty";
+    case UFBX_ELEMENT_LINE_CURVE: return "line_curve";
+    case UFBX_ELEMENT_NURBS_CURVE: return "nurbs_curve";
+    case UFBX_ELEMENT_NURBS_SURFACE: return "nurbs_surface";
+    case UFBX_ELEMENT_NURBS_TRIM_SURFACE: return "nurbs_trim_surface";
+    case UFBX_ELEMENT_NURBS_TRIM_BOUNDARY: return "nurbs_trim_boundary";
+    case UFBX_ELEMENT_PROCEDURAL_GEOMETRY: return "procedural_geometry";
+    case UFBX_ELEMENT_STEREO_CAMERA: return "stereo_camera";
+    case UFBX_ELEMENT_CAMERA_SWITCHER: return "camera_switcher";
+    case UFBX_ELEMENT_MARKER: return "marker";
+    case UFBX_ELEMENT_LOD_GROUP: return "lod_group";
+    case UFBX_ELEMENT_SKIN_DEFORMER: return "skin_deformer";
+    case UFBX_ELEMENT_SKIN_CLUSTER: return "skin_cluster";
+    case UFBX_ELEMENT_BLEND_DEFORMER: return "blend_deformer";
+    case UFBX_ELEMENT_BLEND_CHANNEL: return "blend_channel";
+    case UFBX_ELEMENT_BLEND_SHAPE: return "blend_shape";
+    case UFBX_ELEMENT_CACHE_DEFORMER: return "cache_deformer";
+    case UFBX_ELEMENT_CACHE_FILE: return "cache_file";
     case UFBX_ELEMENT_MATERIAL: return "material";
     case UFBX_ELEMENT_TEXTURE: return "texture";
+    case UFBX_ELEMENT_VIDEO: return "video";
+    case UFBX_ELEMENT_SHADER: return "shader";
+    case UFBX_ELEMENT_SHADER_BINDING: return "shader_binding";
     case UFBX_ELEMENT_ANIM_STACK: return "animation_stack";
+    case UFBX_ELEMENT_ANIM_LAYER: return "animation_layer";
+    case UFBX_ELEMENT_ANIM_VALUE: return "animation_value";
+    case UFBX_ELEMENT_ANIM_CURVE: return "animation_curve";
+    case UFBX_ELEMENT_DISPLAY_LAYER: return "display_layer";
+    case UFBX_ELEMENT_SELECTION_SET: return "selection_set";
+    case UFBX_ELEMENT_SELECTION_NODE: return "selection_node";
+    case UFBX_ELEMENT_CHARACTER: return "character";
+    case UFBX_ELEMENT_CONSTRAINT: return "constraint";
+    case UFBX_ELEMENT_AUDIO_LAYER: return "audio_layer";
+    case UFBX_ELEMENT_AUDIO_CLIP: return "audio_clip";
+    case UFBX_ELEMENT_POSE: return "pose";
+    case UFBX_ELEMENT_METADATA_OBJECT: return "metadata_object";
     case UFBX_ELEMENT_UNKNOWN: return "unknown";
     default: return "other";
     }
@@ -160,4 +192,3 @@ const char* file_format_name(const ufbx_file_format format) noexcept {
 }
 
 }  // namespace pyfbx
-
