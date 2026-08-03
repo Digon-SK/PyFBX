@@ -1,6 +1,7 @@
 """Pythonic bindings for the fast, single-file :mod:`ufbx` scene loader."""
 
 from ._api import as_numpy, find, load, loads, walk
+from ._errors import LoadError, PyFbxError
 from ._native import (
     AnimationCurve,
     AnimationLayer,
@@ -12,7 +13,6 @@ from ._native import (
     Camera,
     Element,
     Light,
-    LoadError,
     Material,
     Mesh,
     Node,
@@ -47,6 +47,7 @@ __all__ = [
     "NurbsCurve",
     "NurbsSurface",
     "Property",
+    "PyFbxError",
     "Scene",
     "SkinCluster",
     "SkinDeformer",

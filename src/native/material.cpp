@@ -123,6 +123,12 @@ void bind_material(py::module_& module) {
         .def("find_property", [](const material_view& self, const std::string& name) {
             return find_property(self.owner, self.material->props, name);
         })
+        .def("__eq__", [](const material_view& self, const material_view& other) {
+            return self.owner.get() == other.owner.get() && self.material == other.material;
+        }, py::is_operator())
+        .def("__hash__", [](const material_view& self) {
+            return reinterpret_cast<std::uintptr_t>(self.material);
+        })
         .def("__repr__", [](const material_view& self) {
             return "Material(name='" + to_string(self.material->name) + "')";
         });

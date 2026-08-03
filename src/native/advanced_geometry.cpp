@@ -105,6 +105,12 @@ void bind_advanced_geometry(py::module_& module) {
         .def("find_property", [](const element_view& self, const std::string& name) {
             return find_property(self.owner, self.element->props, name);
         })
+        .def("__eq__", [](const element_view& self, const element_view& other) {
+            return self.owner.get() == other.owner.get() && self.element == other.element;
+        }, py::is_operator())
+        .def("__hash__", [](const element_view& self) {
+            return reinterpret_cast<std::uintptr_t>(self.element);
+        })
         .def("__repr__", [](const element_view& self) {
             return "Element(name='" + to_string(self.element->name) + "', type='" +
                 element_type_name(self.element->type) + "')";

@@ -245,6 +245,12 @@ void bind_mesh(py::module_& module) {
             return to_tuple(ufbx_get_weighted_face_normal(
                 &self.mesh->vertex_position, self.mesh->faces.data[face_index]));
         }, py::arg("face_index"))
+        .def("__eq__", [](const mesh_view& self, const mesh_view& other) {
+            return self.owner.get() == other.owner.get() && self.mesh == other.mesh;
+        }, py::is_operator())
+        .def("__hash__", [](const mesh_view& self) {
+            return reinterpret_cast<std::uintptr_t>(self.mesh);
+        })
         .def("__repr__", [](const mesh_view& self) {
             return "Mesh(name='" + to_string(self.mesh->name) + "', vertices=" +
                 std::to_string(self.mesh->num_vertices) + ", faces=" +

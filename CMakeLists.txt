@@ -40,8 +40,13 @@ endif()
 
 if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     # Wheels must not depend on DLLs from the build machine's MSYS2 install.
-    target_link_options(_native PRIVATE -static-libgcc -static-libstdc++)
-    target_link_libraries(_native PRIVATE -Wl,-Bstatic winpthread -Wl,-Bdynamic)
+    target_link_options(_native PRIVATE
+        -static-libgcc
+        -static-libstdc++
+        -Wl,-Bstatic,--whole-archive
+        -lwinpthread
+        -Wl,--no-whole-archive,-Bdynamic
+    )
 endif()
 
 install(TARGETS _native LIBRARY DESTINATION pyfbx RUNTIME DESTINATION pyfbx)
