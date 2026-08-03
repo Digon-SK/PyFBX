@@ -117,6 +117,12 @@ void bind_material(py::module_& module) {
         .def_property_readonly("pbr", &pbr_maps)
         .def_property_readonly("fbx", &fbx_maps)
         .def_property_readonly("textures", &material_textures)
+        .def_property_readonly("properties", [](const material_view& self) {
+            return properties(self.owner, self.material->props);
+        })
+        .def("find_property", [](const material_view& self, const std::string& name) {
+            return find_property(self.owner, self.material->props, name);
+        })
         .def("__repr__", [](const material_view& self) {
             return "Material(name='" + to_string(self.material->name) + "')";
         });

@@ -91,6 +91,33 @@ py::tuple scene_animations(const scene_view& self) {
     return result;
 }
 
+py::tuple scene_cameras(const scene_view& self) {
+    const auto& source = self.get()->cameras;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(camera_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
+py::tuple scene_lights(const scene_view& self) {
+    const auto& source = self.get()->lights;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(light_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
+py::tuple scene_bones(const scene_view& self) {
+    const auto& source = self.get()->bones;
+    py::tuple result{source.count};
+    for (std::size_t i = 0; i < source.count; ++i) {
+        result[i] = py::cast(bone_view{self.owner, source.data[i]});
+    }
+    return result;
+}
+
 py::tuple scene_warnings(const scene_view& self) {
     const auto& source = self.get()->metadata.warnings;
     py::tuple result{source.count};
@@ -184,6 +211,24 @@ py::object node_mesh(const node_view& self) {
         : py::cast(mesh_view{self.owner, self.node->mesh});
 }
 
+py::object node_camera(const node_view& self) {
+    return self.node->camera == nullptr
+        ? py::object{py::none()}
+        : py::cast(camera_view{self.owner, self.node->camera});
+}
+
+py::object node_light(const node_view& self) {
+    return self.node->light == nullptr
+        ? py::object{py::none()}
+        : py::cast(light_view{self.owner, self.node->light});
+}
+
+py::object node_bone(const node_view& self) {
+    return self.node->bone == nullptr
+        ? py::object{py::none()}
+        : py::cast(bone_view{self.owner, self.node->bone});
+}
+
 py::tuple node_materials(const node_view& self) {
     const auto& source = self.node->materials;
     py::tuple result{source.count};
@@ -261,7 +306,16 @@ void bind_scene(py::module_& module) {
         .def_property_readonly("parent", &node_parent)
         .def_property_readonly("children", &node_children)
         .def_property_readonly("mesh", &node_mesh)
+        .def_property_readonly("camera", &node_camera)
+        .def_property_readonly("light", &node_light)
+        .def_property_readonly("bone", &node_bone)
         .def_property_readonly("materials", &node_materials)
+        .def_property_readonly("properties", [](const node_view& self) {
+            return properties(self.owner, self.node->props);
+        })
+        .def("find_property", [](const node_view& self, const std::string& name) {
+            return find_property(self.owner, self.node->props, name);
+        })
         .def_property_readonly("visible", [](const node_view& self) { return self.node->visible; })
         .def_property_readonly("is_root", [](const node_view& self) { return self.node->is_root; })
         .def_property_readonly("local_transform", [](const node_view& self) {
@@ -293,6 +347,9 @@ void bind_scene(py::module_& module) {
         .def_property_readonly("materials", &scene_materials)
         .def_property_readonly("textures", &scene_textures)
         .def_property_readonly("animations", &scene_animations)
+        .def_property_readonly("cameras", &scene_cameras)
+        .def_property_readonly("lights", &scene_lights)
+        .def_property_readonly("bones", &scene_bones)
         .def_property_readonly("warnings", &scene_warnings)
         .def_property_readonly("filename", [](const scene_view& self) {
             return to_string(self.get()->metadata.filename);
@@ -337,4 +394,3 @@ void bind_scene(py::module_& module) {
 }
 
 }  // namespace pyfbx
-
