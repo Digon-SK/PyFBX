@@ -31,6 +31,7 @@ class LoadOptions:
     ignore_missing_external_files: bool = False
     generate_missing_normals: bool = True
     strict: bool = False
+    retain_dom: bool = False
     target_axes: AxisSystem = AxisSystem.ORIGINAL
     target_unit_meters: float | None = None
     node_depth_limit: int = 0
@@ -40,4 +41,3 @@ class LoadOptions:
         values = asdict(self)
         values["target_axes"] = self.target_axes.value
         return values
-
